@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+    <title>Your Feed Title</title>
+    <description>This is a description of your feed.</description>
+    <link>http://www.yourwebsite.com</link>
+    <lastBuildDate>Mon, 06 Sep 2009 00:01:00 +0000 </lastBuildDate>
+    <pubDate>Sun, 06 Sep 2009 16:20:00 +0000 </pubDate>
+
+    <item>
+        <title>Article Title</title>
+        <description>This is the article summary.</description>
+        <link>http://www.yourwebsite.com/article1</link>
+        <guid>http://www.yourwebsite.com/article1</guid>
+        <pubDate>Sun, 06 Sep 2009 16:20:00 +0000</pubDate>
+    </item>
+    <!-- Add more items here -->
+</channel>
+</rss>
