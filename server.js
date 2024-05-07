@@ -101,6 +101,5 @@ app.get('/feed.xml', (req, res) => {
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(__dirname));
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
