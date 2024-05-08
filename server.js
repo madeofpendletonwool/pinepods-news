@@ -5,6 +5,10 @@ const fs = require('fs-extra');
 const path = require('path');
 const md = new MarkdownIt();
 
+const app = express();
+app.use(express.static(__dirname));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
 function parseFrontMatter(content) {
     const lines = content.split('\n');
     const frontMatter = {};
@@ -87,7 +91,7 @@ function createFeed() {
     };
 }
 
-const app = express();
+
 app.get('/feed.xml', (req, res) => {
     const feed = createFeed();
     const xmlOptions = {
@@ -98,8 +102,6 @@ app.get('/feed.xml', (req, res) => {
     res.send(toXML(feed, xmlOptions));
 });
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use(express.static(__dirname));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
