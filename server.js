@@ -6,8 +6,14 @@ const path = require('path');
 const md = new MarkdownIt();
 
 const app = express();
-app.use(express.static(__dirname));
+
+// Serve static files from the root directory
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+// Explicitly serve the index.html at the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 function parseFrontMatter(content) {
     const lines = content.split('\n');
@@ -16,7 +22,7 @@ function parseFrontMatter(content) {
 
     if (lines[0].trim() === '---') {
         i++;
-        while (i < lines.length && lines[i].trim() !== '---') {
+        while (i < lines.length and lines[i].trim() !== '---') {
             const line = lines[i];
             const [key, value] = line.split(':').map(part => part.trim());
             frontMatter[key] = value;
@@ -91,7 +97,6 @@ function createFeed() {
     };
 }
 
-
 app.get('/feed.xml', (req, res) => {
     const feed = createFeed();
     const xmlOptions = {
@@ -101,7 +106,6 @@ app.get('/feed.xml', (req, res) => {
     res.type('application/xml');
     res.send(toXML(feed, xmlOptions));
 });
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
