@@ -22,7 +22,8 @@ function parseFrontMatter(content) {
 
     if (lines[0].trim() === '---') {
         i++;
-        while (i < lines.length and lines[i].trim() !== '---') {
+        // Use the logical AND operator (&&) instead of `and`
+        while (i < lines.length && lines[i].trim() !== '---') {
             const line = lines[i];
             const [key, value] = line.split(':').map(part => part.trim());
             frontMatter[key] = value;
@@ -32,6 +33,7 @@ function parseFrontMatter(content) {
     }
     return { frontMatter, body: lines.slice(i).join('\n') };
 }
+
 
 function createFeed() {
     const items = [];
