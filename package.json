@@ -1,7 +1,7 @@
 {
-  "name": "pinepods-news",
+  "name": "pinepods-feed",
   "version": "1.0.0",
-  "description": "A simple site that deploys news about the Pinepods App. The app itself connects to this feed",
+  "description": "A simple site that deploys a public feed for Pinepods news",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +14,7 @@
     "express": "^4.19.2",
     "fs-extra": "^11.2.0",
     "jstoxml": "^5.0.1",
-    "markdown-it": "^14.1.0"
+    "markdown-it": "^14.1.0",
+    "sanitize-html": "^2.12.1"
   }
 }
