@@ -88,37 +88,50 @@ function createFeed() {
         const { frontMatter, body } = parseFrontMatter(content);
         
         const htmlContent = processContent(body);
+        const description = `Pinepods Release Update: ${frontMatter.title || path.basename(file, '.md')}`;
 
         const item = {
             title: frontMatter.title || path.basename(file, '.md'),
-            link: `http://news.pinepods.online/posts/${file}`,
+            link: `https://news.pinepods.online/posts/${file}`,
             guid: {
                 _attrs: {
                     isPermaLink: "false"
                 },
-                _content: `http://news.pinepods.online/posts/${file}`
+                _content: `https://news.pinepods.online/posts/${file}`
             },
-            description: htmlContent,
+            description: description,
             "content:encoded": htmlContent,
-            author: "Collin Pendleton",
+            author: "news@pinepods.online (Collin Pendleton)",
             pubDate: new Date(frontMatter.date || new Date()).toUTCString(),
+            enclosure: {
+                _attrs: {
+                    url: `https://news.pinepods.online/audio/${path.basename(file, '.md')}.mp3`,
+                    length: frontMatter.audioSize || "5000000",
+                    type: "audio/mpeg"
+                }
+            },
+            "itunes:duration": frontMatter.duration || "05:00",
             "itunes:explicit": "no",
             "itunes:author": "Collin Pendleton",
+            "itunes:subtitle": description,
+            "itunes:summary": htmlContent,
             "itunes:image": {
                 _attrs: {
                     href: frontMatter.image || "https://news.pinepods.online/assets/pinepods-logo.jpeg"
                 }
-            }
+            },
+            "itunes:keywords": "pinepods,podcast,app,release,update,news"
         };
 
         items.push({ item });
     });
 
     const channel = {
-        title: "Pinepods News Feed",
+        title: "Pinepods News Podcast",
         link: "https://news.pinepods.online",
         language: "en-US",
-        description: "This feed is a news feed for Pinepods. I release articles detailing every new release.",
+        copyright: "© 2024 Collin Pendleton",
+        description: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app.",
         "atom:link": {
             _attrs: {
                 href: "https://news.pinepods.online/feed.xml",
@@ -128,8 +141,10 @@ function createFeed() {
         },
         image: {
             url: "https://news.pinepods.online/assets/pinepods-logo.jpeg",
-            title: "Pinepods News Feed",
-            link: "https://news.pinepods.online"
+            title: "Pinepods News Podcast",
+            link: "https://news.pinepods.online",
+            width: "1400",
+            height: "1400"
         },
         "itunes:image": {
             _attrs: {
@@ -137,11 +152,22 @@ function createFeed() {
             }
         },
         "itunes:author": "Collin Pendleton",
+        "itunes:summary": "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app.",
+        "itunes:subtitle": "Pinepods App Release Updates",
+        "itunes:owner": {
+            "itunes:name": "Collin Pendleton",
+            "itunes:email": "news@pinepods.online"
+        },
         "itunes:explicit": "no",
+        "itunes:type": "episodic",
         "itunes:category": [
-            { _attrs: { text: "Technology" } },
-            { _attrs: { text: "Tech News" } }
+            { 
+                _attrs: { text: "Technology" },
+                "itunes:category": { _attrs: { text: "Software How-To" } }
+            },
+            { _attrs: { text: "News" } }
         ],
+        "itunes:keywords": "pinepods,podcast,app,release,update,news,technology,software",
         item: items
     };
 
@@ -151,7 +177,8 @@ function createFeed() {
             version: "2.0",
             "xmlns:atom": "http://www.w3.org/2005/Atom",
             "xmlns:content": "http://purl.org/rss/1.0/modules/content/",
-            "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"
+            "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
+            "xmlns:podcast": "https://podcastindex.org/namespace/1.0"
         },
         _content: {
             channel
