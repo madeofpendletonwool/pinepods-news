@@ -90,86 +90,91 @@ function createFeed() {
         const htmlContent = processContent(body);
         const description = `Pinepods Release Update: ${frontMatter.title || path.basename(file, '.md')}`;
 
-        const item = {
-            title: frontMatter.title || path.basename(file, '.md'),
-            link: `https://news.pinepods.online/posts/${file}`,
-            guid: {
-                _attrs: {
-                    isPermaLink: "false"
-                },
+        const item = [
+            { _name: 'title', _content: frontMatter.title || path.basename(file, '.md') },
+            { _name: 'link', _content: `https://news.pinepods.online/posts/${file}` },
+            {
+                _name: 'guid',
+                _attrs: { isPermaLink: "false" },
                 _content: `https://news.pinepods.online/posts/${file}`
             },
-            description: description,
-            "content:encoded": htmlContent,
-            author: "news@pinepods.online (Collin Pendleton)",
-            pubDate: new Date(frontMatter.date || new Date()).toUTCString(),
-            enclosure: {
-                _attrs: {
-                    url: `https://news.pinepods.online/audio/${path.basename(file, '.md')}.mp3`,
-                    length: frontMatter.audioSize || "5000000",
-                    type: "audio/mpeg"
-                }
-            },
-            "itunes:duration": frontMatter.duration || "05:00",
-            "itunes:explicit": "no",
-            "itunes:author": "Collin Pendleton",
-            "itunes:subtitle": description,
-            "itunes:summary": htmlContent,
-            "itunes:image": {
+            { _name: 'description', _content: description },
+            { _name: 'content:encoded', _content: htmlContent },
+            { _name: 'author', _content: "news@pinepods.online (Collin Pendleton)" },
+            { _name: 'pubDate', _content: new Date(frontMatter.date || new Date()).toUTCString() },
+            { _name: 'itunes:explicit', _content: "no" },
+            { _name: 'itunes:author', _content: "Collin Pendleton" },
+            { _name: 'itunes:subtitle', _content: description },
+            { _name: 'itunes:summary', _content: htmlContent },
+            {
+                _name: 'itunes:image',
                 _attrs: {
                     href: frontMatter.image || "https://news.pinepods.online/assets/pinepods-logo.jpeg"
                 }
             },
-            "itunes:keywords": "pinepods,podcast,app,release,update,news"
-        };
+            { _name: 'itunes:keywords', _content: "pinepods,podcast,app,release,update,news" }
+        ];
 
-        items.push({ item });
+        items.push(item);
     });
 
-    const channel = {
-        title: "Pinepods News Podcast",
-        link: "https://news.pinepods.online",
-        language: "en-US",
-        copyright: "© 2024 Collin Pendleton",
-        description: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app.",
-        "atom:link": {
+    const channelContent = [
+        { _name: 'title', _content: "Pinepods News Podcast" },
+        { _name: 'link', _content: "https://news.pinepods.online" },
+        { _name: 'language', _content: "en-US" },
+        { _name: 'copyright', _content: "© 2024 Collin Pendleton" },
+        { _name: 'description', _content: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app." },
+        {
+            _name: 'atom:link',
             _attrs: {
                 href: "https://news.pinepods.online/feed.xml",
                 rel: "self",
                 type: "application/rss+xml"
             }
         },
-        image: {
-            url: "https://news.pinepods.online/assets/pinepods-logo.jpeg",
-            title: "Pinepods News Podcast",
-            link: "https://news.pinepods.online",
-            width: "1400",
-            height: "1400"
+        {
+            _name: 'image',
+            _content: [
+                { _name: 'url', _content: "https://news.pinepods.online/assets/pinepods-logo.jpeg" },
+                { _name: 'title', _content: "Pinepods News Podcast" },
+                { _name: 'link', _content: "https://news.pinepods.online" },
+                { _name: 'width', _content: "1400" },
+                { _name: 'height', _content: "1400" }
+            ]
         },
-        "itunes:image": {
+        {
+            _name: 'itunes:image',
             _attrs: {
                 href: "https://news.pinepods.online/assets/pinepods-logo.jpeg"
             }
         },
-        "itunes:author": "Collin Pendleton",
-        "itunes:summary": "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app.",
-        "itunes:subtitle": "Pinepods App Release Updates",
-        "itunes:owner": {
-            "itunes:name": "Collin Pendleton",
-            "itunes:email": "news@pinepods.online"
+        { _name: 'itunes:author', _content: "Collin Pendleton" },
+        { _name: 'itunes:summary', _content: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app." },
+        { _name: 'itunes:subtitle', _content: "Pinepods App Release Updates" },
+        {
+            _name: 'itunes:owner',
+            _content: [
+                { _name: 'itunes:name', _content: "Collin Pendleton" },
+                { _name: 'itunes:email', _content: "news@pinepods.online" }
+            ]
         },
-        "itunes:explicit": "no",
-        "itunes:type": "episodic",
-        "itunes:category": [
-            { 
-                _attrs: { text: "Technology" },
-                "itunes:category": { _attrs: { text: "Software How-To" } }
-            },
-            { _attrs: { text: "News" } }
-        ],
-        "itunes:keywords": "pinepods,podcast,app,release,update,news,technology,software",
-        item: items
-    };
+        { _name: 'itunes:explicit', _content: "no" },
+        { _name: 'itunes:type', _content: "episodic" },
+        {
+            _name: 'itunes:category',
+            _attrs: { text: "Technology" },
+            _content: {
+                _name: 'itunes:category',
+                _attrs: { text: "Software How-To" }
+            }
+        },
+        {
+            _name: 'itunes:category',
+            _attrs: { text: "News" }
+        },
+        { _name: 'itunes:keywords', _content: "pinepods,podcast,app,release,update,news,technology,software" },
+        ...items.map(item => ({ _name: 'item', _content: item }))
+    ];
 
     return {
         _name: 'rss',
@@ -181,7 +186,8 @@ function createFeed() {
             "xmlns:podcast": "https://podcastindex.org/namespace/1.0"
         },
         _content: {
-            channel
+            _name: 'channel',
+            _content: channelContent
         }
     };
 }
