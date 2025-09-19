@@ -88,62 +88,93 @@ function createFeed() {
         const { frontMatter, body } = parseFrontMatter(content);
         
         const htmlContent = processContent(body);
+        const description = `Pinepods Release Update: ${frontMatter.title || path.basename(file, '.md')}`;
 
-        const item = {
-            title: frontMatter.title || path.basename(file, '.md'),
-            link: `http://news.pinepods.online/posts/${file}`,
-            guid: {
-                _attrs: {
-                    isPermaLink: "false"
-                },
-                _content: `http://news.pinepods.online/posts/${file}`
+        const item = [
+            { _name: 'title', _content: frontMatter.title || path.basename(file, '.md') },
+            { _name: 'link', _content: `https://news.pinepods.online/posts/${file}` },
+            {
+                _name: 'guid',
+                _attrs: { isPermaLink: "false" },
+                _content: `https://news.pinepods.online/posts/${file}`
             },
-            description: htmlContent,
-            "content:encoded": htmlContent,
-            author: "Collin Pendleton",
-            pubDate: new Date(frontMatter.date || new Date()).toUTCString(),
-            "itunes:explicit": "no",
-            "itunes:author": "Collin Pendleton",
-            "itunes:image": {
+            { _name: 'description', _content: description },
+            { _name: 'content:encoded', _content: htmlContent },
+            { _name: 'author', _content: "news@pinepods.online (Collin Pendleton)" },
+            { _name: 'pubDate', _content: new Date(frontMatter.date || new Date()).toUTCString() },
+            { _name: 'itunes:explicit', _content: "no" },
+            { _name: 'itunes:author', _content: "Collin Pendleton" },
+            { _name: 'itunes:subtitle', _content: description },
+            { _name: 'itunes:summary', _content: htmlContent },
+            {
+                _name: 'itunes:image',
                 _attrs: {
                     href: frontMatter.image || "https://news.pinepods.online/assets/pinepods-logo.jpeg"
                 }
-            }
-        };
+            },
+            { _name: 'itunes:keywords', _content: "pinepods,podcast,app,release,update,news" }
+        ];
 
-        items.push({ item });
+        items.push(item);
     });
 
-    const channel = {
-        title: "Pinepods News Feed",
-        link: "https://news.pinepods.online",
-        language: "en-US",
-        description: "This feed is a news feed for Pinepods. I release articles detailing every new release.",
-        "atom:link": {
+    const channelContent = [
+        { _name: 'title', _content: "Pinepods News Podcast" },
+        { _name: 'link', _content: "https://news.pinepods.online" },
+        { _name: 'language', _content: "en-US" },
+        { _name: 'copyright', _content: "© 2024 Collin Pendleton" },
+        { _name: 'description', _content: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app." },
+        {
+            _name: 'atom:link',
             _attrs: {
                 href: "https://news.pinepods.online/feed.xml",
                 rel: "self",
                 type: "application/rss+xml"
             }
         },
-        image: {
-            url: "https://news.pinepods.online/assets/pinepods-logo.jpeg",
-            title: "Pinepods News Feed",
-            link: "https://news.pinepods.online"
+        {
+            _name: 'image',
+            _content: [
+                { _name: 'url', _content: "https://news.pinepods.online/assets/pinepods-logo.jpeg" },
+                { _name: 'title', _content: "Pinepods News Podcast" },
+                { _name: 'link', _content: "https://news.pinepods.online" },
+                { _name: 'width', _content: "1400" },
+                { _name: 'height', _content: "1400" }
+            ]
         },
-        "itunes:image": {
+        {
+            _name: 'itunes:image',
             _attrs: {
                 href: "https://news.pinepods.online/assets/pinepods-logo.jpeg"
             }
         },
-        "itunes:author": "Collin Pendleton",
-        "itunes:explicit": "no",
-        "itunes:category": [
-            { _attrs: { text: "Technology" } },
-            { _attrs: { text: "Tech News" } }
-        ],
-        item: items
-    };
+        { _name: 'itunes:author', _content: "Collin Pendleton" },
+        { _name: 'itunes:summary', _content: "The official podcast feed for Pinepods release updates and news. Get notified about every new release directly in your podcast app." },
+        { _name: 'itunes:subtitle', _content: "Pinepods App Release Updates" },
+        {
+            _name: 'itunes:owner',
+            _content: [
+                { _name: 'itunes:name', _content: "Collin Pendleton" },
+                { _name: 'itunes:email', _content: "news@pinepods.online" }
+            ]
+        },
+        { _name: 'itunes:explicit', _content: "no" },
+        { _name: 'itunes:type', _content: "episodic" },
+        {
+            _name: 'itunes:category',
+            _attrs: { text: "Technology" },
+            _content: {
+                _name: 'itunes:category',
+                _attrs: { text: "Software How-To" }
+            }
+        },
+        {
+            _name: 'itunes:category',
+            _attrs: { text: "News" }
+        },
+        { _name: 'itunes:keywords', _content: "pinepods,podcast,app,release,update,news,technology,software" },
+        ...items.map(item => ({ _name: 'item', _content: item }))
+    ];
 
     return {
         _name: 'rss',
@@ -151,10 +182,12 @@ function createFeed() {
             version: "2.0",
             "xmlns:atom": "http://www.w3.org/2005/Atom",
             "xmlns:content": "http://purl.org/rss/1.0/modules/content/",
-            "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"
+            "xmlns:itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
+            "xmlns:podcast": "https://podcastindex.org/namespace/1.0"
         },
         _content: {
-            channel
+            _name: 'channel',
+            _content: channelContent
         }
     };
 }
