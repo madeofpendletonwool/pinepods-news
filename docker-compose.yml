@@ -1,0 +1,7 @@
+services:
+  pinepods-news:
+    build: .
+    container_name: pinepods-news
+    restart: unless-stopped
+    ports:
+      - "8094:3000"
