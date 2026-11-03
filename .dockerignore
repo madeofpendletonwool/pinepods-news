@@ -1,4 +1,12 @@
 node_modules
+npm-debug.log*
 .git
+.gitignore
 .DS_Store
 **/.DS_Store
+.vercel
+.env*
+test
+Dockerfile
+docker-compose.yml
+README.md

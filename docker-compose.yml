@@ -1,7 +1,18 @@
 services:
   pinepods-news:
     build: .
+    image: pinepods-news:latest
     container_name: pinepods-news
     restart: unless-stopped
     ports:
       - "8094:3000"
+    environment:
+      # Public URL used for the feed, canonical links and sitemap.
+      SITE_URL: https://news.pinepods.online
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    # Optional: mount posts so new articles go live without a rebuild
+    # (the server picks up added/changed files automatically).
+    # volumes:
+    #   - ./posts:/app/posts:ro
